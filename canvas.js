@@ -31,6 +31,9 @@ function initializeCanvas(canvas) {
         canvas.ctx.moveTo(canvas.x, canvas.y);
         canvas.ctx.lineTo(e.x, e.y);
         canvas.ctx.stroke();
+        //TODO:
+        //Send update to server here
+        //**************************
         canvas.x = e.x;
         canvas.y = e.y;
     }
