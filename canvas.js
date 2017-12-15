@@ -3,6 +3,7 @@ function init() {
     var canvas = {}
     canvas.element = document.getElementById("mainCanvas")
     canvas = initializeCanvas(canvas);
+    console.log("it works");
 }
 
 function initializeCanvas(canvas) {
