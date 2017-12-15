@@ -75,6 +75,6 @@ function classify() {
     var image = canvas.ctx.getImageData(0,0, canvas.element.width, canvas.element.height);
     var imData = image.data;
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://127.0.0.1:8888', true);
+    request.open('POST', 'http://127.0.0.1:8888', true);
     request.send(imData);
 }
