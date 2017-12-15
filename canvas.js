@@ -1,6 +1,6 @@
+var canvas = {}
 
 function init() {
-    var canvas = {}
     canvas.element = document.getElementById("mainCanvas")
     canvas = initializeCanvas(canvas);
     console.log("Successfully Initialized");
@@ -66,4 +66,15 @@ function initializeStyle(canvas) {
     canvas.ctx.fillRect(0, 0, canvas.width, canvas.height);
     canvas.isDrawing = true;
     return canvas;
+}
+
+function classify() {
+    // var pixelated = new Image();
+    // pixelated.src = canvas.element.toDataURL();
+    // document.getElementById('pixelatedImage').appendChild(pixelated);
+    var image = canvas.ctx.getImageData(0,0, canvas.element.width, canvas.element.height);
+    var imData = image.data;
+    var request = new XMLHttpRequest();
+    request.open('GET', 'http://127.0.0.1:8888', true);
+    request.send(imData);
 }

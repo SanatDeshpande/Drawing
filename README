@@ -1,1 +1,7 @@
 Tool to classify user drawing into one of 5 Categories
+
+TODO:
+1. Get basic Djano App working to support backend classificaiton via UI input.
+2. Modify trained ML model to run in app (include model training files)
+3. Test prediction/classification.
+4. Make pretty.
