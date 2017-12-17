@@ -3,9 +3,6 @@ var canvas = {}
 function init() {
     canvas.element = document.getElementById("mainCanvas")
     canvas = initializeCanvas(canvas);
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://127.0.0.1:8000', true);
-    request.send('TEST');
     console.log("Successfully Initialized");
 }
 
@@ -72,12 +69,34 @@ function initializeStyle(canvas) {
 }
 
 function classify() {
-    // var pixelated = new Image();
-    // pixelated.src = canvas.element.toDataURL();
-    // document.getElementById('pixelatedImage').appendChild(pixelated);
-    var image = canvas.ctx.getImageData(0,0, canvas.element.width, canvas.element.height);
-    var imData = image.data;
+    //downsize image
+    var x = 26;
+    var y = 26;
+    var xStep = canvas.element.width/26;
+    var yStep = canvas.element.height/26;
+
+    var small = new Array();
+    for (var i = 0; i < x; i++) {
+        for (var j = 0; j < y; j++) {
+            var image = canvas.element.getContext('2d').getImageData(
+                i * xStep,
+                j * yStep,
+                i * xStep + xStep,
+                j * yStep + yStep,
+            );
+            small.push(average(image.data));
+        }
+    }
+    //send data to classifier as POST request
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://127.0.0.1:8000', true);
-    request.send(imData);
+    request.open('POST', 'http://127.0.0.1:8000/classify', true);
+    request.send(small);
+}
+
+function average(data) {
+    var sum = 0;
+    for (var i = 0; i < data.length; i+=4) {
+        sum += data[i] + data[i+1] + data[i+2];
+    }
+    return sum/data.length;
 }
