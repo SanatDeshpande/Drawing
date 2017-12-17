@@ -3,6 +3,9 @@ var canvas = {}
 function init() {
     canvas.element = document.getElementById("mainCanvas")
     canvas = initializeCanvas(canvas);
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://127.0.0.1:8000', true);
+    request.send('TEST');
     console.log("Successfully Initialized");
 }
 
@@ -75,6 +78,6 @@ function classify() {
     var image = canvas.ctx.getImageData(0,0, canvas.element.width, canvas.element.height);
     var imData = image.data;
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://127.0.0.1:8888', true);
+    request.open('POST', 'http://127.0.0.1:8000', true);
     request.send(imData);
 }
