@@ -1,6 +1,7 @@
+{% load static %}
 <html>
 <head>
-<script src='./canvas.js'/></script>
+<script src="{% static 'js/canvas.js' %}"/></script>
 </head>
 <body onload = 'init()'>
     <canvas id = 'mainCanvas'></canvas>
