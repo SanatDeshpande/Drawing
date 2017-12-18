@@ -12,17 +12,23 @@ import pickle
 import json
 
 @csrf_exempt
-def index(request, prediction=None):
+def index(request):
+    label = ImageClassifier.prediction
+    if label is not None:
+        return render(
+            request,
+            'index.html',
+            {'predictedLabel': label}
+        )
     return render(
         request,
-        'index.html'
+        'index.html',
+        {'predictedLabel': ''}
     )
 
 @csrf_exempt
 def classify(request):
-    image = Image.bytes_to_np(request.body, Image.HEIGHT, Image.WIDTH)
-    with open('image', 'wb') as f:
-        pickle.dump(image, f)
-    prediction = ImageClassifier.make_prediction(image)
-    print(prediction)
-    return HttpResponse(status=200)
+    Image.image = Image.bytes_to_np(request.body, Image.HEIGHT, Image.WIDTH)
+    ImageClassifier.prediction = ImageClassifier.make_prediction(Image.image)
+    print(ImageClassifier.prediction)
+    return redirect('index')

@@ -54,10 +54,9 @@ function initializeCanvas(canvas) {
     return canvas;
 }
 
-
 function initializeStyle(canvas) {
     canvas.ctx = canvas.getContext("2d");
-    canvas.setAttribute('width', document.body.clientWidth * .8 + 'px');
+    canvas.setAttribute('width', document.body.clientHeight * .8 + 'px');
     canvas.setAttribute('height', document.body.clientHeight * .8 + 'px');
     canvas.style.borderStyle = 'solid';
     canvas.style.borderWidth = '3px';
@@ -70,33 +69,14 @@ function initializeStyle(canvas) {
 
 function classify() {
     //downsize image
-    var x = 26;
-    var y = 26;
-    var xStep = canvas.element.width/26;
-    var yStep = canvas.element.height/26;
-
-    var small = new Array();
-    for (var i = 0; i < x; i++) {
-        for (var j = 0; j < y; j++) {
-            var image = canvas.element.getContext('2d').getImageData(
-                i * xStep,
-                j * yStep,
-                i * xStep + xStep,
-                j * yStep + yStep,
-            );
-            small.push(average(image.data));
-        }
-    }
+    var image = canvas.element.getContext('2d').getImageData(
+        0,
+        0,
+        canvas.element.width,
+        canvas.element.height
+    );
     //send data to classifier as POST request
     var request = new XMLHttpRequest();
     request.open('POST', 'http://127.0.0.1:8000/classify', true);
-    request.send(small);
-}
-
-function average(data) {
-    var sum = 0;
-    for (var i = 0; i < data.length; i+=4) {
-        sum += data[i] + data[i+1] + data[i+2];
-    }
-    return sum/data.length;
+    request.send(image.data);
 }

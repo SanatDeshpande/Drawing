@@ -11,7 +11,7 @@ import math
 class Image(models.Model):
     #fixed dimensions for classifier
     HEIGHT, WIDTH = 26, 26
-
+    image = None
     #converts bytes from POST request to np float array
     def bytes_to_np(image, height, width):
         #converts to square of just relevant pixel values
@@ -26,6 +26,8 @@ class Image(models.Model):
 
 
 class ImageClassifier(models.Model):
+    prediction = None
+    
     class Classifier(torch.nn.Module):
         def __init__(self):
             super().__init__()
@@ -45,9 +47,9 @@ class ImageClassifier(models.Model):
             x = self.final_conv(x).view(-1, 8)
             x = F.relu(self.linear1(x))
             x = F.relu(self.linear2(x))
-            #x.data = torch.t(x.data)                                                                                                 \
 
             return x
+
     def make_prediction(image):
         model = ImageClassifier.Classifier()
         model.load_state_dict(torch.load('static/learned_parameters/parameters'))

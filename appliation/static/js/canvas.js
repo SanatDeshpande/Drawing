@@ -54,7 +54,6 @@ function initializeCanvas(canvas) {
     return canvas;
 }
 
-
 function initializeStyle(canvas) {
     canvas.ctx = canvas.getContext("2d");
     canvas.setAttribute('width', document.body.clientHeight * .8 + 'px');
@@ -69,7 +68,6 @@ function initializeStyle(canvas) {
 }
 
 function classify() {
-    //downsize image
     var image = canvas.element.getContext('2d').getImageData(
         0,
         0,
@@ -80,4 +78,5 @@ function classify() {
     var request = new XMLHttpRequest();
     request.open('POST', 'http://127.0.0.1:8000/classify', true);
     request.send(image.data);
+    location.reload(true);
 }
