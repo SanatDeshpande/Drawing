@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 import pickle
 import os
+import math
 
 class Image(models.Model):
     #fixed dimensions for classifier
@@ -13,10 +14,15 @@ class Image(models.Model):
 
     #converts bytes from POST request to np float array
     def bytes_to_np(image, height, width):
-        #converts to string array to make parsing easier
-        image = str(image)[2:-1].split(',')
-        image = [float(i) for i in image]
-        return np.asarray(image, dtype=float).reshape(height, width)
+        #converts to square of just relevant pixel values
+        image = image[::4]
+        side_length = int(math.sqrt(len(image)))
+        image = torch.Tensor(image)
+        image = image.view(1, -1, side_length)
+        image = Variable(image)
+        image = F.avg_pool2d(image, kernel_size=[int(side_length/height), int(side_length/width)])
+        return image.data.numpy().reshape(height, width)
+
 
 
 class ImageClassifier(models.Model):
@@ -47,5 +53,8 @@ class ImageClassifier(models.Model):
         model.load_state_dict(torch.load('static/learned_parameters/parameters'))
         x = autograd.Variable(torch.from_numpy(image.astype(np.float32)))
         prediction = model(x)
-        #prediction = np.argmax(prediction.data.numpy())
-        return prediction
+        prediction = np.argmax(prediction.data.numpy())
+
+        name_map = {0: 'Apple', 1: 'Basketball', 2: 'Cookie', 3: 'Clock', 4: 'Fan'}
+
+        return name_map[prediction]
