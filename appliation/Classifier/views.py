@@ -13,6 +13,7 @@ import json
 
 @csrf_exempt
 def index(request):
+    #grabs predicted label if not None, and updates template
     label = ImageClassifier.prediction
     if label is not None:
         return render(
@@ -28,7 +29,11 @@ def index(request):
 
 @csrf_exempt
 def classify(request):
+    #processes image into 26x26
     Image.image = Image.bytes_to_np(request.body, Image.HEIGHT, Image.WIDTH)
+
+    #passes image through CNN to classify
     ImageClassifier.prediction = ImageClassifier.make_prediction(Image.image)
-    print(ImageClassifier.prediction)
+
+    #redirect to index for display...not sure what the best practice is here
     return redirect('index')

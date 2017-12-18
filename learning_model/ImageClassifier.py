@@ -20,7 +20,7 @@ class ImageClassifier(torch.nn.Module):
             x = F.relu(self.conv2(x))
             n, c, h, w = x.size()
             x = F.avg_pool2d(x, kernel_size=[h, w]) #the avg pooling computes one output value out of the matrix
-            x = self.final_conv(x).view(-1, NUM_CLASSES+3)
+            x = self.final_conv(x).view(-1, 8)
             x = F.relu(self.linear1(x))
             x = F.relu(self.linear2(x))
             #x.data = torch.t(x.data)
@@ -46,8 +46,6 @@ model = ImageClassifier()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 def train(batch_size):
-    # model.train() puts our model in train mode, which can require different
-    # behavior than eval mode (for example in the case of dropout).
     model.train()
     # i is is a 1-D array with shape [batch_size]
     i = np.random.choice(train_images.shape[0], size=batch_size, replace=False)
@@ -90,5 +88,6 @@ for i in range(NUM_OPT_STEPS):
         train_accs.append(approx_train_accuracy())
         val_accs.append(val_accuracy())
         print("%6d %5.2f %5.2f" % (i, train_accs[-1], val_accs[-1]))
-        break
+
+#saves parameters to file
 torch.save(model.state_dict(), './model')
