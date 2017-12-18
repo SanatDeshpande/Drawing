@@ -1,5 +1,9 @@
 Tool to classify user drawing into one of 5 Categories
 
+
+TO RUN:
+Please run in a virutal environment respecting requirements.txt
+
 Overview:
 
 This application uses a simple interface to allow the user to draw an image
