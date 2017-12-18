@@ -23,16 +23,24 @@ class Image(models.Model):
         image = image.view(1, -1, side_length)
         image = Variable(image)
 
-        #uses avg pool to shrink image appropriately
+        #uses avg pool to shrink image appropriately, and then trims
         '''
         Would be better to do this step client side to avoid sending
-        a large post request.
+        a large post request. Also better to do it in one step, avoiding
+        trimming the image.
         '''
         image = F.avg_pool2d(image, kernel_size=[int(side_length/height), int(side_length/width)])
-
+        #trims image...not ideal solution
+        #TODO: Fix downsizing so that we never need to trim
+        image = image.data.numpy()
+        _, w, h = image.shape
+        image = image.reshape(w, h)
+        output = []
+        for i in range(image.shape[0] - 1):
+            output.append(image[i][:26])
+        output = np.asarray(output)
         #returns data shaped as 26x26
-        return image.data.numpy().reshape(height, width)
-
+        return output
 
 
 class ImageClassifier(models.Model):
@@ -71,9 +79,9 @@ class ImageClassifier(models.Model):
     def make_prediction(image):
         #initializes model as an instance of the CNN
         model = ImageClassifier.Classifier()
-
+        BASE = os.path.dirname(os.path.realpath(__file__))
         #loads in learned parameters
-        model.load_state_dict(torch.load('static/learned_parameters/parameters'))
+        model.load_state_dict(torch.load(BASE + '/../static/learned_parameters/parameters'))
 
         #converts image to a pytorch variable and classifies it w/ forward pass
         x = autograd.Variable(torch.from_numpy(image.astype(np.float32)))
