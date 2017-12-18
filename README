@@ -2,7 +2,13 @@ Tool to classify user drawing into one of 5 Categories
 
 
 TO RUN:
-Please run in a virutal environment respecting requirements.txt
+Please run in a virutal environment respecting requirements.txt using the
+follwing command:
+---------------------------------
+pip3 install -r requirements.txt
+---------------------------------
+Then run the demo.py file, which will start the application on a server
+connecting to http://127.0.0.1:8000/
 
 Overview:
 
