@@ -30,14 +30,24 @@ class Image(models.Model):
         trimming the image.
         '''
         image = F.avg_pool2d(image, kernel_size=[int(side_length/height), int(side_length/width)])
-        #trims image...not ideal solution
+        print(image.size())
+
         #TODO: Fix downsizing so that we never need to trim
+
+        #returns image if it is the right size
+        if image.size()[1] == height and image.size()[2] == width:
+            return image.data.numpy().reshape(height, width)
+
+        #trims image...not ideal solution, not ideal implementation
         image = image.data.numpy()
         _, w, h = image.shape
         image = image.reshape(w, h)
         output = []
-        for i in range(image.shape[0] - 1):
-            output.append(image[i][:26])
+        for i in range(height):
+            temp = []
+            for j in range(width):
+                temp.append(image[i][j])
+            output.append(temp)
         output = np.asarray(output)
         #returns data shaped as 26x26
         return output
