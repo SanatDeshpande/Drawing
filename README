@@ -31,6 +31,9 @@ trained on a dataset of 50,000 small images (26x26), each corresponding
 to one of the five labeled categories. 45,000 of those images were used for
 training while the remaining 5,000 were used for validation.
 
+PLEASE DRAW LARGE, AND USE THE WHOLE CANVAS. The image is crunched down for
+classificaiton, so if it is already small, then it becomes a garble of pixels.
+This is an issue that is on my list of enhancements.
 
 
 Bugs/ToDo:
@@ -42,3 +45,6 @@ Bugs/ToDo:
 
 - Downsize image client side (or compress) to avoid sending such a large file
   in the POST request.
+
+- Adjust for the fact that people may draw really small images, causing the 
+  data to be unusable after being downsized.
