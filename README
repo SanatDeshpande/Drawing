@@ -48,3 +48,6 @@ Bugs/ToDo:
 
 - Adjust for the fact that people may draw really small images, causing the 
   data to be unusable after being downsized.
+
+– Adjust thickness of drawing line as a function of window size. Also resize
+  window dynamically – don't wait for page reload
