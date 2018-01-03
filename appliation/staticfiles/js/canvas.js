@@ -16,8 +16,11 @@ function initializeCanvas(canvas) {
         if (canvas.isDrawing) {
             return;
         }
-        canvas.x = e.x;
-        canvas.y = e.y;
+        var adjust = adjustCoordinates(e.x, e.y);
+        var x = adjust[0];
+        var y = adjust[1];
+        canvas.x = x;
+        canvas.y = y;
         canvas.isDrawing = true;
     }
 
@@ -31,28 +34,40 @@ function initializeCanvas(canvas) {
         if (!canvas.isDrawing) {
             return;
         }
+        var adjust = adjustCoordinates(e.x, e.y);
+        var x = adjust[0];
+        var y = adjust[1];
         canvas.ctx.beginPath();
         canvas.ctx.fillStyle = 'white';
-        canvas.ctx.arc(e.x, e.y, 15, 0, 2 * Math.PI, false);
+        canvas.ctx.arc(x, y, 15, 0, 2 * Math.PI, false);
 
         //fills in circles between two points detected by the canvas
         //for smoother appearance
         var grain = 10;
-        var xDiff = (canvas.x - e.x)/grain;
-        var yDiff = (canvas.y - e.y)/grain;
+        var xDiff = (canvas.x - x)/grain;
+        var yDiff = (canvas.y - y)/grain;
         for (var i = 0; i < grain; i++) {
-            canvas.ctx.arc(e.x + i * xDiff, e.y + i * yDiff, 15, 0, 2 * Math.PI, false);
+            canvas.ctx.arc(x + i * xDiff, y + i * yDiff, 15, 0, 2 * Math.PI, false);
         }
 
         //draws relevant points and updates position
         canvas.ctx.fill();
-        canvas.x = e.x;
-        canvas.y = e.y;
+        canvas.x = x;
+        canvas.y = y;
     }
 
     canvas.element.onmouseleave = function(e) {
         canvas.isDrawing = false;
     }
+
+    //adjusts point offset to draw on canvas
+    function adjustCoordinates(x, y) {
+        var container = canvas.element.parentElement;
+        x = x - container.getBoundingClientRect().x;
+        y = y - container.getBoundingClientRect().y;
+        return [x, y];
+    }
+
     return canvas;
 }
 
