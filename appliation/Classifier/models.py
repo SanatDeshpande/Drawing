@@ -30,8 +30,7 @@ class Image(models.Model):
         trimming the image.
         '''
         image = F.avg_pool2d(image, kernel_size=[int(side_length/height), int(side_length/width)])
-        print(image.size())
-
+        
         #TODO: Fix downsizing so that we never need to trim
 
         #returns image if it is the right size
